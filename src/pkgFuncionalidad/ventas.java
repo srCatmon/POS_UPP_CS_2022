@@ -10,4 +10,6 @@ package pkgFuncionalidad;
  */
 public class ventas {
     
+    
+    
 }
