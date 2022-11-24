@@ -28,13 +28,13 @@ public class frmInventario extends javax.swing.JFrame {
 
         label1 = new java.awt.Label();
         lblCodigo = new java.awt.Label();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnAceptar = new javax.swing.JButton();
+        txtCodigo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -42,21 +42,26 @@ public class frmInventario extends javax.swing.JFrame {
         label1.setText("label1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Inventanrio de productos");
+        setTitle("Inventario de productos");
         setMinimumSize(new java.awt.Dimension(850, 600));
         setPreferredSize(new java.awt.Dimension(850, 600));
 
         lblCodigo.setFont(new java.awt.Font("Dubai", 0, 18)); // NOI18N
         lblCodigo.setText("Codigo o nombre del producto");
 
-        jButton1.setText("Aceptar");
-        jButton1.setMaximumSize(new java.awt.Dimension(120, 30));
-        jButton1.setMinimumSize(new java.awt.Dimension(120, 30));
-        jButton1.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnAceptar.setText("Aceptar");
+        btnAceptar.setMaximumSize(new java.awt.Dimension(120, 30));
+        btnAceptar.setMinimumSize(new java.awt.Dimension(120, 30));
+        btnAceptar.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setMaximumSize(new java.awt.Dimension(150, 30));
-        jTextField1.setMinimumSize(new java.awt.Dimension(150, 30));
-        jTextField1.setPreferredSize(new java.awt.Dimension(150, 30));
+        txtCodigo.setMaximumSize(new java.awt.Dimension(150, 30));
+        txtCodigo.setMinimumSize(new java.awt.Dimension(150, 30));
+        txtCodigo.setPreferredSize(new java.awt.Dimension(150, 30));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -72,14 +77,14 @@ public class frmInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Codigo producto", "Nombre", "Marca", "Precio compra", "Precio Venta", "Stock"
+                "Codigo producto", "Nombre", "Marca", "Precio compra", "Precio venta", "Stock"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true, true
+                false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -112,20 +117,35 @@ public class frmInventario extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
         }
 
-        jButton2.setText("Actualizar");
-        jButton2.setMaximumSize(new java.awt.Dimension(120, 30));
-        jButton2.setMinimumSize(new java.awt.Dimension(120, 30));
-        jButton2.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnActualizar.setText("Actualizar");
+        btnActualizar.setMaximumSize(new java.awt.Dimension(120, 30));
+        btnActualizar.setMinimumSize(new java.awt.Dimension(120, 30));
+        btnActualizar.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Eliminar");
-        jButton3.setMaximumSize(new java.awt.Dimension(120, 30));
-        jButton3.setMinimumSize(new java.awt.Dimension(120, 30));
-        jButton3.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setMaximumSize(new java.awt.Dimension(120, 30));
+        btnEliminar.setMinimumSize(new java.awt.Dimension(120, 30));
+        btnEliminar.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Salir");
-        jButton4.setMaximumSize(new java.awt.Dimension(120, 30));
-        jButton4.setMinimumSize(new java.awt.Dimension(120, 30));
-        jButton4.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnSalir.setText("Salir");
+        btnSalir.setMaximumSize(new java.awt.Dimension(120, 30));
+        btnSalir.setMinimumSize(new java.awt.Dimension(120, 30));
+        btnSalir.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -146,15 +166,15 @@ public class frmInventario extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnActualizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -164,24 +184,40 @@ public class frmInventario extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -211,25 +247,23 @@ public class frmInventario extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmInventario().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frmInventario().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private java.awt.Label label1;
     private java.awt.Label lblCodigo;
+    private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables
 }
