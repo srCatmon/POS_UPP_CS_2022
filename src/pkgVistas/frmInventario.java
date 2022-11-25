@@ -4,6 +4,15 @@
  */
 package pkgVistas;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author cesar
@@ -31,7 +40,7 @@ public class frmInventario extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         txtCodigo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblInventario = new javax.swing.JTable();
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -63,7 +72,7 @@ public class frmInventario extends javax.swing.JFrame {
         txtCodigo.setMinimumSize(new java.awt.Dimension(150, 30));
         txtCodigo.setPreferredSize(new java.awt.Dimension(150, 30));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -95,26 +104,26 @@ public class frmInventario extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(80);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(120);
-            jTable1.getColumnModel().getColumn(1).setMinWidth(80);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(1).setMaxWidth(130);
-            jTable1.getColumnModel().getColumn(2).setMinWidth(80);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(2).setMaxWidth(120);
-            jTable1.getColumnModel().getColumn(3).setMinWidth(50);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(3).setMaxWidth(100);
-            jTable1.getColumnModel().getColumn(4).setMinWidth(50);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(4).setMaxWidth(100);
-            jTable1.getColumnModel().getColumn(5).setMinWidth(50);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(5).setMaxWidth(100);
+        jScrollPane1.setViewportView(tblInventario);
+        if (tblInventario.getColumnModel().getColumnCount() > 0) {
+            tblInventario.getColumnModel().getColumn(0).setMinWidth(80);
+            tblInventario.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tblInventario.getColumnModel().getColumn(0).setMaxWidth(120);
+            tblInventario.getColumnModel().getColumn(1).setMinWidth(80);
+            tblInventario.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblInventario.getColumnModel().getColumn(1).setMaxWidth(130);
+            tblInventario.getColumnModel().getColumn(2).setMinWidth(80);
+            tblInventario.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tblInventario.getColumnModel().getColumn(2).setMaxWidth(120);
+            tblInventario.getColumnModel().getColumn(3).setMinWidth(50);
+            tblInventario.getColumnModel().getColumn(3).setPreferredWidth(80);
+            tblInventario.getColumnModel().getColumn(3).setMaxWidth(100);
+            tblInventario.getColumnModel().getColumn(4).setMinWidth(50);
+            tblInventario.getColumnModel().getColumn(4).setPreferredWidth(80);
+            tblInventario.getColumnModel().getColumn(4).setMaxWidth(100);
+            tblInventario.getColumnModel().getColumn(5).setMinWidth(50);
+            tblInventario.getColumnModel().getColumn(5).setPreferredWidth(80);
+            tblInventario.getColumnModel().getColumn(5).setMaxWidth(100);
         }
 
         btnActualizar.setText("Actualizar");
@@ -204,7 +213,19 @@ public class frmInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
+        Connection con = pkgFuncionalidad.conectorBD.getConnection();
+        Connection conec = con;
+        System.out.println(con);
+        /*try {
+            Connection con = pkgFuncionalidad.conectorBD.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from usuarios;");
+            if(rs.next()){
+                JOptionPane.showMessageDialog(this, "Hola");
+            }else JOptionPane.showMessageDialog(this, "adios");
+        } catch (SQLException ex) {
+            Logger.getLogger(frmInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -261,9 +282,9 @@ public class frmInventario extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private java.awt.Label label1;
     private java.awt.Label lblCodigo;
+    private javax.swing.JTable tblInventario;
     private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables
 }
