@@ -213,10 +213,7 @@ public class frmInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        Connection con = pkgFuncionalidad.conectorBD.getConnection();
-        Connection conec = con;
-        System.out.println(con);
-        /*try {
+        try {
             Connection con = pkgFuncionalidad.conectorBD.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from usuarios;");
@@ -225,7 +222,7 @@ public class frmInventario extends javax.swing.JFrame {
             }else JOptionPane.showMessageDialog(this, "adios");
         } catch (SQLException ex) {
             Logger.getLogger(frmInventario.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
