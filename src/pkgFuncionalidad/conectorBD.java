@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  * @author cesar
  */
 public class conectorBD {
-        public static Connection getConnection() {
+    public static Connection getConnection() {
         Connection con = null;
         try {
             Class.forName("org.gjt.mm.mysql.Driver");
