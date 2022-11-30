@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pkgFuncionalidad;
 
 import java.sql.Connection;
@@ -13,15 +9,18 @@ import javax.swing.JOptionPane;
  *
  * @author cesar
  */
+
 public class conectorBD {
+
     public static Connection getConnection() {
         Connection con = null;
         try {
             Class.forName("org.gjt.mm.mysql.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/upp_pos_cs_2022", "POS_SIS", "159753123");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3308/upp_pos_cs_2022?user=POS_SIS&password=159753123");
         } catch (ClassNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
         return con;
     }
+
 }
