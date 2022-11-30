@@ -4,6 +4,8 @@
  */
 package pkgVistas;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,26 +21,71 @@ public class frmVentas extends javax.swing.JFrame {
     public frmVentas() {
         initComponents();
     }
-    
-    private void Buscar(){
-        try{
-            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
-            Object[] datos = pkgFuncionalidad.ventas.buscar(codigoProducto);
-            Object[] datosR = new Object[6];
+
+    private void Buscar(Object[] datos) {
+        try {
             DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+            Object[] datosR = new Object[6];
             int ttlRows = modelo.getRowCount();
-            float total = Float.parseFloat(txtTotalVenta.getText()) + (float)datos[3];
-            txtTotalVenta.setText(String.valueOf(total));
-            datosR[0] = ttlRows+1;
-            datosR[1] = datos[0];
-            datosR[2] = datos[1];
-            datosR[3] = datos[2];
-            datosR[4] = 1;
-            datosR[5] = datos[3];
-            modelo.addRow(datosR);
-            
-        }catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(null,"Debe introducir un codigo de producto valido");
+            float Total = Float.parseFloat(txtTotalVenta.getText());
+            if (ttlRows == 0) {
+                datosR[0] = ttlRows + 1;
+                datosR[1] = datos[0];
+                datosR[2] = datos[1];
+                datosR[3] = datos[2];
+                datosR[4] = 1;
+                datosR[5] = datos[3];
+                modelo.addRow(datosR);
+                txtTotalVenta.setText(String.valueOf(Total + Float.parseFloat(String.valueOf(datos[3]))));
+            } else {
+                for (int i = 0; i < ttlRows; i++) {
+                    if (codigoProducto == (Integer) tblProductos.getValueAt(i, 1)) {
+                        int nuevoCantidad = Integer.parseInt(String.valueOf(modelo.getValueAt(i, 4))) + 1;
+                        float nuevoTotal = nuevoCantidad * Float.parseFloat(String.valueOf(datos[3]));
+                        modelo.setValueAt(nuevoCantidad, i, 4);
+                        modelo.setValueAt(nuevoTotal, i, 5);
+                        txtTotalVenta.setText(String.valueOf(Total + Float.parseFloat(String.valueOf(datos[3]))));
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Debe introducir un codigo de producto valido");
+        }
+    }
+
+    public void Limpiar() {
+        DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
+        for (int i = model.getRowCount() - 1; i > -1; i--) {
+            model.removeRow(i);
+        }
+        txtTotalVenta.setText("0.0");
+    }
+
+    public void Cobrar() {
+        try {
+            String dinero = txtDinero.getText();
+            float Cambio = 0.0f;
+            float venta = Float.parseFloat(txtTotalVenta.getText());
+            lblCambio3.setText(String.valueOf(Cambio));
+            lblCambio3.setForeground(Color.black);
+            lblCambio2.setForeground(Color.black);
+            if (!"".equals(dinero)) {
+                Cambio = Float.parseFloat(dinero) - venta;
+                if (Cambio >= 0) {
+                    lblCambio3.setForeground(Color.green);
+                    lblCambio2.setForeground(Color.green);
+                    lblCambio3.setText(String.valueOf(Cambio));
+                    btnAceptarCobro.setEnabled(true);
+                } else {
+                    lblCambio3.setForeground(Color.red);
+                    lblCambio2.setForeground(Color.red);
+                    lblCambio3.setText(String.valueOf(Cambio));
+                    btnAceptarCobro.setEnabled(false);
+                }
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Introdujo un caracter no numerico");
         }
     }
 
@@ -51,6 +98,17 @@ public class frmVentas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        frmCobro = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
+        lblTotal3 = new javax.swing.JLabel();
+        lblTotal2 = new javax.swing.JLabel();
+        lblCambio2 = new javax.swing.JLabel();
+        lblCambio3 = new javax.swing.JLabel();
+        txtDinero = new java.awt.TextField();
+        btnAceptarCobro = new javax.swing.JButton();
+        lblTotal1 = new javax.swing.JLabel();
+        lblDinero = new javax.swing.JLabel();
+        lblCambio = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         lblCodigoProducto = new javax.swing.JLabel();
@@ -65,6 +123,130 @@ public class frmVentas extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+
+        frmCobro.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frmCobro.setTitle("Cobro");
+        frmCobro.setBounds(new java.awt.Rectangle(150, 250, 400, 300));
+        frmCobro.setMaximumSize(new java.awt.Dimension(450, 300));
+        frmCobro.setMinimumSize(new java.awt.Dimension(450, 300));
+        frmCobro.setPreferredSize(new java.awt.Dimension(450, 300));
+        frmCobro.setResizable(false);
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(400, 300));
+        jPanel1.setMinimumSize(new java.awt.Dimension(400, 300));
+        jPanel1.setVerifyInputWhenFocusTarget(false);
+
+        lblTotal3.setFont(new java.awt.Font("Dialog", 0, 22)); // NOI18N
+        lblTotal3.setText("0.00");
+
+        lblTotal2.setFont(new java.awt.Font("Dialog", 0, 22)); // NOI18N
+        lblTotal2.setText("$");
+
+        lblCambio2.setFont(new java.awt.Font("Dialog", 0, 22)); // NOI18N
+        lblCambio2.setText("$");
+
+        lblCambio3.setFont(new java.awt.Font("Dialog", 0, 22)); // NOI18N
+        lblCambio3.setText("0.00");
+
+        txtDinero.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txtDinero.setFont(new java.awt.Font("Dubai", 0, 16)); // NOI18N
+        txtDinero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDineroActionPerformed(evt);
+            }
+        });
+        txtDinero.addTextListener(new java.awt.event.TextListener() {
+            public void textValueChanged(java.awt.event.TextEvent evt) {
+                txtDineroTextValueChanged(evt);
+            }
+        });
+        txtDinero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDineroKeyPressed(evt);
+            }
+        });
+
+        btnAceptarCobro.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        btnAceptarCobro.setText("Cobrar");
+        btnAceptarCobro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarCobroActionPerformed(evt);
+            }
+        });
+
+        lblTotal1.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblTotal1.setText("Total:");
+
+        lblDinero.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblDinero.setText("Dinero:");
+
+        lblCambio.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblCambio.setText("Cambio:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTotal1)
+                    .addComponent(lblDinero)
+                    .addComponent(lblCambio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtDinero, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblTotal2)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblTotal3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblCambio2)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCambio3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(btnAceptarCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTotal3)
+                            .addComponent(lblTotal2))
+                        .addGap(24, 24, 24)
+                        .addComponent(txtDinero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCambio3)
+                            .addComponent(lblCambio2))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAceptarCobro))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblTotal1)
+                        .addGap(24, 24, 24)
+                        .addComponent(lblDinero)
+                        .addGap(34, 34, 34)
+                        .addComponent(lblCambio)))
+                .addContainerGap(88, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout frmCobroLayout = new javax.swing.GroupLayout(frmCobro.getContentPane());
+        frmCobro.getContentPane().setLayout(frmCobroLayout);
+        frmCobroLayout.setHorizontalGroup(
+            frmCobroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, frmCobroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        frmCobroLayout.setVerticalGroup(
+            frmCobroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Punto de ventas");
@@ -121,8 +303,18 @@ public class frmVentas extends javax.swing.JFrame {
 
         txtCodigoProducto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtCodigoProducto.setMinimumSize(new java.awt.Dimension(200, 30));
+        txtCodigoProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCodigoProductoKeyPressed(evt);
+            }
+        });
 
         btnCobrar.setText("Cobrar");
+        btnCobrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCobrarActionPerformed(evt);
+            }
+        });
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +338,11 @@ public class frmVentas extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         txtTotalVenta.setEditable(false);
         txtTotalVenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -203,7 +400,7 @@ public class frmVentas extends javax.swing.JFrame {
                     .addComponent(btnCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTotalVenta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -222,50 +419,85 @@ public class frmVentas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        Buscar();
+        int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+        Object[] datos = pkgFuncionalidad.ventas.buscar(codigoProducto);
+        if (datos[0] != null) {
+            Buscar(datos);
+        }
+        txtCodigoProducto.setText(null);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
         int[] NumRows = tblProductos.getSelectedRows();
-        int contador = 1;
-        float Tot = Float.parseFloat(txtTotalVenta.getText());
+        float totalVenta = Float.parseFloat(txtTotalVenta.getText());
         for (int i = NumRows.length - 1; i >= 0; i--) {
-            float T = Float.parseFloat(model.getValueAt(NumRows[i], 5).toString());
-            Tot -= T;
-            model.removeRow(NumRows[i]);
+            totalVenta -= Float.parseFloat(modelo.getValueAt(NumRows[i], 5).toString());
+            modelo.removeRow(NumRows[i]);
+            txtTotalVenta.setText(String.valueOf(totalVenta));
         }
-        for (int i = 0; i < tblProductos.getRowCount(); i++) {
-            model.setValueAt(contador, i, 0);
-            contador += 1;
-        }
-        txtTotalVenta.setText(String.valueOf(Tot));        // TODO add your handling code here:
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnDuplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDuplicarActionPerformed
         try {
-            DefaultTableModel model = (DefaultTableModel) tblProductos.getModel();
             int[] numrow = tblProductos.getSelectedRows();
-            float Tot = 0;
+            float totalNuevo = Float.parseFloat(txtTotalVenta.getText());
+            int cantidadNuevo;
             for (int i = 0; i < numrow.length; i++) {
-                int contador = model.getRowCount();
-                Object[] Dupli = new Object[6];
-                Dupli[0] = contador+1;
-                Dupli[1] = tblProductos.getValueAt(numrow[i], 1);
-                Dupli[2] = tblProductos.getValueAt(numrow[i], 2);
-                Dupli[3] = tblProductos.getValueAt(numrow[i], 3);
-                Dupli[4] = tblProductos.getValueAt(numrow[i], 4);
-                Dupli[5] = tblProductos.getValueAt(numrow[i], 5);
-                model.addRow(Dupli);
-                double precio = Double.parseDouble(tblProductos.getValueAt(numrow[i], 5).toString());
-                double canti = Double.parseDouble(tblProductos.getValueAt(numrow[i], 3).toString());
-                Tot += precio;
-                txtTotalVenta.setText(String.valueOf(Tot));
+                cantidadNuevo = (Integer) tblProductos.getValueAt(i, 4) * 2;
+                totalNuevo += (Float.parseFloat(tblProductos.getValueAt(numrow[i], 5).toString()) * 2);
+                tblProductos.setValueAt(cantidadNuevo, numrow[i], 4);
+                txtTotalVenta.setText(String.valueOf(totalNuevo));
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btnDuplicarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        Limpiar();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDineroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDineroActionPerformed
+
+    private void txtDineroTextValueChanged(java.awt.event.TextEvent evt) {//GEN-FIRST:event_txtDineroTextValueChanged
+        Cobrar();
+    }//GEN-LAST:event_txtDineroTextValueChanged
+
+    private void txtDineroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDineroKeyPressed
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            Limpiar();
+            frmCobro.dispose();
+        }
+    }//GEN-LAST:event_txtDineroKeyPressed
+
+    private void btnAceptarCobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarCobroActionPerformed
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+        int totRows = modelo.getRowCount();
+        String[] codigos = new String[totRows];
+        for (int i = 0; i > totRows; i++) {
+            codigos[i] = String.valueOf(tblProductos.getValueAt(i,1));
+        }        
+        pkgFuncionalidad.ventas.AgregarVenta(codigos);
+    }//GEN-LAST:event_btnAceptarCobroActionPerformed
+
+    private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
+        frmCobro.setVisible(true);
+        lblTotal3.setText(txtTotalVenta.getText());
+    }//GEN-LAST:event_btnCobrarActionPerformed
+
+    private void txtCodigoProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyPressed
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+            Object[] datos = pkgFuncionalidad.ventas.buscar(codigoProducto);
+            if (datos[0] != null) {
+                Buscar(datos);
+            }
+            txtCodigoProducto.setText(null);
+        }
+    }//GEN-LAST:event_txtCodigoProductoKeyPressed
 
     /**
      * @param args the command line arguments
@@ -295,27 +527,36 @@ public class frmVentas extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmVentas().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frmVentas().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAceptarCobro;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCobrar;
     private javax.swing.JButton btnDuplicar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JFrame frmCobro;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCambio;
+    private javax.swing.JLabel lblCambio2;
+    private javax.swing.JLabel lblCambio3;
     private javax.swing.JLabel lblCodigoProducto;
+    private javax.swing.JLabel lblDinero;
+    private javax.swing.JLabel lblTotal1;
+    private javax.swing.JLabel lblTotal2;
+    private javax.swing.JLabel lblTotal3;
     private javax.swing.JLabel lblTotalVenta;
     private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtCodigoProducto;
+    private java.awt.TextField txtDinero;
     private javax.swing.JTextField txtTotalVenta;
     // End of variables declaration//GEN-END:variables
 }

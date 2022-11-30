@@ -41,4 +41,14 @@ public class ventas {
         return datos;
     }
     
+    public static void AgregarVenta(String[] Codigos) {
+        try {
+            for (int i = 0; i < Codigos.length; i++) {
+                
+            }
+        } catch (Exception e) {
+
+        }
+    }
+    
 }
