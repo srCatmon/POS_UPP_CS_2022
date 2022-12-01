@@ -6,9 +6,11 @@ package pkgFuncionalidad;
 
 import java.awt.HeadlessException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,12 +20,15 @@ import javax.swing.JOptionPane;
 public class ventas {
     
     static Connection con = conectorBD.getConnection();
-    private static Object[] datos = new Object[4];
+    static Statement st;
+    static ResultSet rs;
+    static Date fecha;
     
     public static Object[] buscar(int codigoProducto){    
+        Object[] datos = new Object[4];
         try{
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM productos where codigoProducto ="+codigoProducto+";");
+            st =  con.createStatement();
+            rs = st.executeQuery("SELECT * FROM productos where codigoProducto ="+codigoProducto+";");
             if (rs.next()) {
                 datos[0] = rs.getObject("codigoProducto");
                 datos[1] = rs.getObject("nombre");
@@ -38,13 +43,20 @@ public class ventas {
         return datos;
     }
     
-    public static void AgregarVenta(String[] Codigos) {
+    public static void AgregarVenta(Object codigo, Object nombre, Object marca, Object cantidad, Object precio, String usuario, Date fecha) {
         try {
-            for (int i = 0; i < Codigos.length; i++) {
-                
-            }
-        } catch (Exception e) {
-
+            st = con.createStatement();
+            PreparedStatement ps = con.prepareStatement("insert into ventas(codigoProducto,nombre,marca,precio,cantidad,vendedor,fecha) values(?,?,?,?,?,?,?)");
+            ps.setObject(1, codigo);
+            ps.setObject(2, nombre);
+            ps.setObject(3, marca);
+            ps.setObject(4, precio);
+            ps.setObject(5, cantidad);
+            ps.setObject(6, usuario);
+            ps.setObject(7, fecha);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
     

@@ -6,6 +6,7 @@ package pkgVistas;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,14 +38,13 @@ public class frmVentas extends javax.swing.JFrame {
             datosR[4] = 1;
             datosR[5] = datos[3];
             modelo.addRow(datosR);
-            txtTotalVenta.setText(String.valueOf(Total + Float.parseFloat(String.valueOf(datos[3]))));
+            txtTotalVenta.setText(String.valueOf(Float.parseFloat(String.valueOf(datos[3]))));
         } else {
             for (int i = 0; i < ttlRows; i++) {
                 if (codigoProducto == (Integer) tblProductos.getValueAt(i, 1)) {
                     int nuevoCantidad = Integer.parseInt(String.valueOf(modelo.getValueAt(i, 4))) + 1;
-                    float nuevoTotal = nuevoCantidad * Float.parseFloat(String.valueOf(datos[3]));
                     modelo.setValueAt(nuevoCantidad, i, 4);
-                    modelo.setValueAt(nuevoTotal, i, 5);
+                    modelo.setValueAt(datos[3], i, 5);
                     txtTotalVenta.setText(String.valueOf(Total + Float.parseFloat(String.valueOf(datos[3]))));
                 }
             }
@@ -74,6 +74,7 @@ public class frmVentas extends javax.swing.JFrame {
                     lblCambio2.setForeground(Color.green);
                     lblCambio3.setText(String.valueOf(Cambio));
                     btnAceptarCobro.setEnabled(true);
+                    
                 } else {
                     lblCambio3.setForeground(Color.red);
                     lblCambio2.setForeground(Color.red);
@@ -84,6 +85,22 @@ public class frmVentas extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Introdujo un caracter no numerico");
         }
+    }
+    
+    public void SubirVenta(){
+            int totCol = tblProductos.getRowCount();
+            Object codigo, cantidad, nombre, marca, precio;
+            Date fecha = new Date();
+            for (int i = 0; i < totCol; i++) {
+                codigo = tblProductos.getValueAt(i, 1);
+                nombre = tblProductos.getValueAt(i, 2);
+                marca = tblProductos.getValueAt(i, 3);
+                cantidad = tblProductos.getValueAt(i, 4);
+                precio = tblProductos.getValueAt(i, 5);
+                pkgFuncionalidad.ventas.AgregarVenta(codigo, nombre, marca, cantidad, precio, usuario, fecha);
+            }
+            Limpiar();
+            frmCobro.dispose();
     }
 
     /**
@@ -178,19 +195,20 @@ public class frmVentas extends javax.swing.JFrame {
 
         btnAceptarCobro.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
         btnAceptarCobro.setText("Cobrar");
+        btnAceptarCobro.setEnabled(false);
         btnAceptarCobro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarCobroActionPerformed(evt);
             }
         });
 
-        lblTotal1.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblTotal1.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
         lblTotal1.setText("Total:");
 
-        lblDinero.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblDinero.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
         lblDinero.setText("Dinero:");
 
-        lblCambio.setFont(new java.awt.Font("Dubai", 0, 15)); // NOI18N
+        lblCambio.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
         lblCambio.setText("Cambio:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -214,35 +232,30 @@ public class frmVentas extends javax.swing.JFrame {
                         .addComponent(lblCambio2)
                         .addGap(18, 18, 18)
                         .addComponent(lblCambio3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(btnAceptarCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnAceptarCobro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblTotal3)
-                            .addComponent(lblTotal2))
-                        .addGap(24, 24, 24)
-                        .addComponent(txtDinero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCambio3)
-                            .addComponent(lblCambio2))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAceptarCobro))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblTotal1)
-                        .addGap(24, 24, 24)
-                        .addComponent(lblDinero)
-                        .addGap(34, 34, 34)
-                        .addComponent(lblCambio)))
-                .addContainerGap(88, Short.MAX_VALUE))
+                            .addComponent(lblTotal2)
+                            .addComponent(lblTotal1))
+                        .addGap(16, 16, 16)
+                        .addComponent(txtDinero, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblDinero))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCambio3)
+                    .addComponent(lblCambio2)
+                    .addComponent(lblCambio))
+                .addGap(18, 18, 18)
+                .addComponent(btnAceptarCobro)
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout frmCobroLayout = new javax.swing.GroupLayout(frmCobro.getContentPane());
@@ -264,7 +277,7 @@ public class frmVentas extends javax.swing.JFrame {
 
         lblTituloLogin.setFont(new java.awt.Font("Segoe UI Light", 0, 24)); // NOI18N
         lblTituloLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTituloLogin.setText("Acceso al sistema");
+        lblTituloLogin.setText("Acceso de usuarios");
         lblTituloLogin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lblTituloLogin.setPreferredSize(new java.awt.Dimension(200, 40));
         lblTituloLogin.setRequestFocusEnabled(false);
@@ -575,9 +588,9 @@ public class frmVentas extends javax.swing.JFrame {
             float totalNuevo = Float.parseFloat(txtTotalVenta.getText());
             int cantidadNuevo;
             for (int i = 0; i < numrow.length; i++) {
-                cantidadNuevo = (Integer) tblProductos.getValueAt(i, 4) * 2;
-                totalNuevo += (Float.parseFloat(tblProductos.getValueAt(numrow[i], 5).toString()) * 2);
-                tblProductos.setValueAt(cantidadNuevo, numrow[i], 4);
+                cantidadNuevo = (Integer) tblProductos.getValueAt(i, 4);
+                totalNuevo += (Float.parseFloat(tblProductos.getValueAt(numrow[i], 5).toString()) * cantidadNuevo);
+                tblProductos.setValueAt(cantidadNuevo*2, numrow[i], 4);
                 txtTotalVenta.setText(String.valueOf(totalNuevo));
             }
         } catch (NumberFormatException e) {
@@ -599,24 +612,20 @@ public class frmVentas extends javax.swing.JFrame {
 
     private void txtDineroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDineroKeyPressed
         if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            Limpiar();
-            frmCobro.dispose();
+            SubirVenta();
         }
     }//GEN-LAST:event_txtDineroKeyPressed
 
     private void btnAceptarCobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarCobroActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
-        int totRows = modelo.getRowCount();
-        String[] codigos = new String[totRows];
-        for (int i = 0; i > totRows; i++) {
-            codigos[i] = String.valueOf(tblProductos.getValueAt(i,1));
-        }        
-        pkgFuncionalidad.ventas.AgregarVenta(codigos);
+        SubirVenta();
     }//GEN-LAST:event_btnAceptarCobroActionPerformed
 
     private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
+        if (txtCodigoProducto.isEditable()) {
+           
         frmCobro.setVisible(true);
-        lblTotal3.setText(txtTotalVenta.getText());
+        lblTotal3.setText(txtTotalVenta.getText()); 
+        }else JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
     }//GEN-LAST:event_btnCobrarActionPerformed
 
     private void txtCodigoProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyPressed
