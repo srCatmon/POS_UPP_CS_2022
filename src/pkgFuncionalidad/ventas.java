@@ -5,8 +5,6 @@
 package pkgFuncionalidad;
 
 import java.awt.HeadlessException;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +32,6 @@ public class ventas {
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontro el producto");
             }
-            
         }catch(HeadlessException | SQLException e){
             JOptionPane.showMessageDialog(null, e);
         }
