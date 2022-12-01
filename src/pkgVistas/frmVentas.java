@@ -22,8 +22,8 @@ public class frmVentas extends javax.swing.JFrame {
     public frmVentas() {
         initComponents();
     }
-    
-    private String usuario;
+
+    private String usuario = "";
 
     private void Buscar(Object[] datos, int codigoProducto) {
         DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
@@ -74,7 +74,7 @@ public class frmVentas extends javax.swing.JFrame {
                     lblCambio2.setForeground(Color.green);
                     lblCambio3.setText(String.valueOf(Cambio));
                     btnAceptarCobro.setEnabled(true);
-                    
+
                 } else {
                     lblCambio3.setForeground(Color.red);
                     lblCambio2.setForeground(Color.red);
@@ -86,21 +86,21 @@ public class frmVentas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Introdujo un caracter no numerico");
         }
     }
-    
-    public void SubirVenta(){
-            int totCol = tblProductos.getRowCount();
-            Object codigo, cantidad, nombre, marca, precio;
-            Date fecha = new Date();
-            for (int i = 0; i < totCol; i++) {
-                codigo = tblProductos.getValueAt(i, 1);
-                nombre = tblProductos.getValueAt(i, 2);
-                marca = tblProductos.getValueAt(i, 3);
-                cantidad = tblProductos.getValueAt(i, 4);
-                precio = tblProductos.getValueAt(i, 5);
-                pkgFuncionalidad.ventas.AgregarVenta(codigo, nombre, marca, cantidad, precio, usuario, fecha);
-            }
-            Limpiar();
-            frmCobro.dispose();
+
+    public void SubirVenta() {
+        int totCol = tblProductos.getRowCount();
+        Object codigo, cantidad, nombre, marca, precio;
+        Date fecha = new Date();
+        for (int i = 0; i < totCol; i++) {
+            codigo = tblProductos.getValueAt(i, 1);
+            nombre = tblProductos.getValueAt(i, 2);
+            marca = tblProductos.getValueAt(i, 3);
+            cantidad = tblProductos.getValueAt(i, 4);
+            precio = tblProductos.getValueAt(i, 5);
+            pkgFuncionalidad.ventas.AgregarVenta(codigo, nombre, marca, cantidad, precio, usuario, fecha);
+        }
+        Limpiar();
+        frmCobro.dispose();
     }
 
     /**
@@ -144,10 +144,10 @@ public class frmVentas extends javax.swing.JFrame {
         lblVendedor = new javax.swing.JLabel();
         lblUser = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mnAdministracion = new javax.swing.JMenu();
         mnAdminProductos = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        miAdminUsers = new javax.swing.JMenuItem();
+        miInventario = new javax.swing.JMenuItem();
         mnLogin = new javax.swing.JMenu();
         miAcceder = new javax.swing.JMenuItem();
 
@@ -456,18 +456,33 @@ public class frmVentas extends javax.swing.JFrame {
 
         lblUser.setText("Usuario: ");
 
-        jMenu1.setText("Administracion");
+        mnAdministracion.setText("Administracion");
 
         mnAdminProductos.setText("Administrar productos");
-        jMenu1.add(mnAdminProductos);
+        mnAdminProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnAdminProductosActionPerformed(evt);
+            }
+        });
+        mnAdministracion.add(mnAdminProductos);
 
-        jMenuItem1.setText("Administrar usuarios");
-        jMenu1.add(jMenuItem1);
+        miAdminUsers.setText("Administrar usuarios");
+        miAdminUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAdminUsersActionPerformed(evt);
+            }
+        });
+        mnAdministracion.add(miAdminUsers);
 
-        jMenuItem3.setText("Inventario");
-        jMenu1.add(jMenuItem3);
+        miInventario.setText("Inventario");
+        miInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miInventarioActionPerformed(evt);
+            }
+        });
+        mnAdministracion.add(miInventario);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(mnAdministracion);
 
         mnLogin.setText("Usuario");
         mnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -556,14 +571,14 @@ public class frmVentas extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (txtCodigoProducto.isEditable()) {
-            try{
-            int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
-            Object[] datos = pkgFuncionalidad.ventas.buscar(codigoProducto);
-            if (datos[0] != null) {
-                Buscar(datos, codigoProducto);
-            }
-            txtCodigoProducto.setText(null);
-            }catch(NumberFormatException e){
+            try {
+                int codigoProducto = Integer.parseInt(txtCodigoProducto.getText());
+                Object[] datos = pkgFuncionalidad.ventas.buscar(codigoProducto);
+                if (datos[0] != null) {
+                    Buscar(datos, codigoProducto);
+                }
+                txtCodigoProducto.setText(null);
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Debe introducir un codigo de producto");
             }
         } else {
@@ -572,34 +587,47 @@ public class frmVentas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
-        int[] NumRows = tblProductos.getSelectedRows();
-        float totalVenta = Float.parseFloat(txtTotalVenta.getText());
-        for (int i = NumRows.length - 1; i >= 0; i--) {
-            totalVenta -= Float.parseFloat(modelo.getValueAt(NumRows[i], 5).toString());
-            modelo.removeRow(NumRows[i]);
-            txtTotalVenta.setText(String.valueOf(totalVenta));
+        if (!usuario.equals("")) {
+            DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+            int[] NumRows = tblProductos.getSelectedRows();
+            float totalVenta = Float.parseFloat(txtTotalVenta.getText());
+            for (int i = NumRows.length - 1; i >= 0; i--) {
+                totalVenta -= Float.parseFloat(modelo.getValueAt(NumRows[i], 5).toString());
+                modelo.removeRow(NumRows[i]);
+                txtTotalVenta.setText(String.valueOf(totalVenta));
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
         }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnDuplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDuplicarActionPerformed
         try {
-            int[] numrow = tblProductos.getSelectedRows();
-            float totalNuevo = Float.parseFloat(txtTotalVenta.getText());
-            int cantidadNuevo;
-            for (int i = 0; i < numrow.length; i++) {
-                cantidadNuevo = (Integer) tblProductos.getValueAt(i, 4);
-                totalNuevo += (Float.parseFloat(tblProductos.getValueAt(numrow[i], 5).toString()) * cantidadNuevo);
-                tblProductos.setValueAt(cantidadNuevo*2, numrow[i], 4);
-                txtTotalVenta.setText(String.valueOf(totalNuevo));
+            if (!usuario.equals("")) {
+                int[] numrow = tblProductos.getSelectedRows();
+                float totalNuevo = Float.parseFloat(txtTotalVenta.getText());
+                int cantidadNuevo;
+                for (int i = 0; i < numrow.length; i++) {
+                    cantidadNuevo = (Integer) tblProductos.getValueAt(i, 4);
+                    totalNuevo += (Float.parseFloat(tblProductos.getValueAt(numrow[i], 5).toString()) * cantidadNuevo);
+                    tblProductos.setValueAt(cantidadNuevo * 2, numrow[i], 4);
+                    txtTotalVenta.setText(String.valueOf(totalNuevo));
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
             }
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_btnDuplicarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        Limpiar();
+        if (!usuario.equals("")) {
+            Limpiar();
+        } else
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDineroActionPerformed
@@ -622,10 +650,11 @@ public class frmVentas extends javax.swing.JFrame {
 
     private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
         if (txtCodigoProducto.isEditable()) {
-           
-        frmCobro.setVisible(true);
-        lblTotal3.setText(txtTotalVenta.getText()); 
-        }else JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
+
+            frmCobro.setVisible(true);
+            lblTotal3.setText(txtTotalVenta.getText());
+        } else
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
     }//GEN-LAST:event_btnCobrarActionPerformed
 
     private void txtCodigoProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyPressed
@@ -657,6 +686,30 @@ public class frmVentas extends javax.swing.JFrame {
     private void miAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAccederActionPerformed
         frmLogin.setVisible(true);
     }//GEN-LAST:event_miAccederActionPerformed
+
+    private void miInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInventarioActionPerformed
+        if (!usuario.equals("")) {
+            pkgVistas.frmInventario form = new pkgVistas.frmInventario();
+            form.setVisible(true);
+        } else
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
+    }//GEN-LAST:event_miInventarioActionPerformed
+
+    private void miAdminUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAdminUsersActionPerformed
+        if (!usuario.equals("")) {
+            pkgVistas.frmAdminUsers form = new pkgVistas.frmAdminUsers();
+            form.setVisible(true);
+        } else
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
+    }//GEN-LAST:event_miAdminUsersActionPerformed
+
+    private void mnAdminProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAdminProductosActionPerformed
+        if (!usuario.equals("")) {
+            pkgVistas.frmAdminProductos form = new pkgVistas.frmAdminProductos();
+            form.setVisible(true);
+        } else
+            JOptionPane.showMessageDialog(null, "Debe iniciar sesion para poder realizar operaciones");
+    }//GEN-LAST:event_mnAdminProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -701,10 +754,7 @@ public class frmVentas extends javax.swing.JFrame {
     private javax.swing.JButton btnLogin;
     private javax.swing.JFrame frmCobro;
     private javax.swing.JFrame frmLogin;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCambio;
@@ -722,7 +772,10 @@ public class frmVentas extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel lblVendedor;
     private javax.swing.JMenuItem miAcceder;
+    private javax.swing.JMenuItem miAdminUsers;
+    private javax.swing.JMenuItem miInventario;
     private javax.swing.JMenuItem mnAdminProductos;
+    private javax.swing.JMenu mnAdministracion;
     private javax.swing.JMenu mnLogin;
     private javax.swing.JPasswordField pfContrasenia;
     private javax.swing.JTable tblProductos;
